@@ -4,12 +4,20 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import app from "../firebase/firebase.init";
-import { useRef } from "react";
-import { Navigate } from "react-router-dom";
+import { useCallback, useContext, useRef, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+import { AuthContext } from "../Providers/AuthProvider";
 
 const SignIn = () => {
   const auth = getAuth(app);
   const emailref = useRef();
+  const navigate = useNavigate();
+
+  const {user} = useContext(AuthContext);
+
+  if(user){
+    console.log(user.email);
+  }
 
   //Form Submit......!
   const handleFormSubmit = (event) => {
@@ -24,8 +32,7 @@ const SignIn = () => {
       .then((user) => {
         console.log(user);
         event.target.reset();
-        alert("done");
-        <Navigate to="/dashboard" replace={true}></Navigate>;
+        navigate('/dashboard', { replace: true });
       })
       .catch((error) => {
         console.log(error.message);

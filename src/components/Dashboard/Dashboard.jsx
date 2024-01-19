@@ -1,7 +1,15 @@
 import "./Dashboard.css";
 import Header from "../Header/Header";
+import { useContext } from "react";
+import { AuthContext } from "../Providers/AuthProvider";
 
 const Dashboard = () => {
+  const { user } = useContext(AuthContext);
+
+  if (user) {
+    console.log(user.email);
+  }
+
   return (
     <div className="px-10">
       <Header></Header>
@@ -9,7 +17,17 @@ const Dashboard = () => {
         <div className="mt-10">
           <div className="card shadow-lg">
             <div className="card-body">
-              <h3>m enorfdjklfns vxp</h3>
+              {user ? (
+                <>
+                  <span>{user.email}</span>
+                  <span>{user.displayName}</span>
+                  <button className="btn btn-xs">
+                    Sign out
+                  </button>
+                </>
+              ) : (
+                <a to="/login">Login </a>
+              )}
             </div>
           </div>
         </div>

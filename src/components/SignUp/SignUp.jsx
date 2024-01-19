@@ -1,11 +1,12 @@
 import { createUserWithEmailAndPassword, getAuth, sendEmailVerification, updateProfile } from "firebase/auth";
 import app from "../firebase/firebase.init";
 import { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const auth = getAuth(app);
-  const [error, setError] = useState('')
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   //form submit.....!
   const handleFormSubmit = (event) => {
@@ -30,7 +31,7 @@ const SignUp = () => {
       event.target.reset();
 
       //Redirect to Sign In Page...!
-      <Navigate to="/" replace={true}></Navigate>
+      navigate('/', { replace: true });
      }).catch((error) => {
       console.error(error.massage);
       setError(error.massage);

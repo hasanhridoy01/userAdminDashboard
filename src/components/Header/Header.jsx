@@ -1,15 +1,23 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import './Header.css'
 import { getAuth, signOut } from "firebase/auth";
 import app from "../firebase/firebase.init";
+import { useContext } from "react";
+import { AuthContext } from "../Providers/AuthProvider";
 
 const Header = () => {
   const auth = getAuth(app);
+  const navigate = useNavigate();
+
+  const {user} = useContext(AuthContext);
+
+  // console.log(user.email);
 
   //user Sign Out..!
   const handleLogout = () => {
     signOut(auth).then(() => {
       alert('user logout')
+      navigate('/', { replace: true });
     }).catch((error) => {
       console.log(error);
     })
@@ -23,7 +31,7 @@ const Header = () => {
         <div className="navabr">
           <Link to="dashboard" className="mr-2">Dashboard</Link>
           <Link to="/" className="mr-2">Sign In</Link>
-          <Link to="signup" className="mr-2">Sign Out</Link>
+          <Link to="/signup" className="mr-2">Sign Up</Link>
         </div>
         <div className="flex-none gap-2">
           <div className="form-control">
