@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router-dom"
+import Dashboard from "./components/Dashboard/Dashboard"
 
 function App() {
   
@@ -6,7 +7,7 @@ function App() {
   return (
     <>
       <Routes>
-        {/* <Route path="" element={}></Route> */}
+        <Route path="/" element={<Dashboard/>}></Route>
       </Routes>
     </>
   )

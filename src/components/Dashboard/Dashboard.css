@@ -1,0 +1,8 @@
+.add-user{
+    display: inline;
+    width: 160px;
+}
+.user{
+    margin: 20px 0px 15px 160px;
+    font-size: large;
+}
