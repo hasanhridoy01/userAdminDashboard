@@ -1,9 +1,11 @@
 import "./Dashboard.css";
+import Header from "../Header/Header";
 
 const Dashboard = () => {
   return (
-    <div className="px-10 mt-10">
-      <div className="grid grid-cols-4 gap-4">
+    <div className="px-10">
+      <Header></Header>
+      <div className="grid grid-cols-4 gap-4 mt-10">
         <div className="mt-10">
           <div className="card shadow-lg">
             <div className="card-body">
@@ -13,47 +15,61 @@ const Dashboard = () => {
         </div>
         <div className="col-span-3">
           <div className="card p-10 mt-10 shadow-lg">
-        <button
-          className="btn btn-outline btn-success add-user"
-          onClick={() => document.getElementById("my_modal_1").showModal()}
-        >
-          Add New User
-        </button>
-        <div className="card-body">
-          <div className="overflow-x-auto">
-            <table className="table table-zebra">
-              <thead>
-                <tr>
-                  <th>Id</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>About</th>
-                  <th>Photo</th>
-                  <th>Address</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th>1</th>
-                  <td>Cy Ganderton</td>
-                  <td>Blue@gmail.com</td>
-                  <td>Quality Control Specialist</td>
-                  <td>
-                    <img src="../../../public/vite.svg" alt="" />
-                  </td>
-                  <td>Mirpur-11</td>
-                  <td>
-                     <button className="btn btn-info btn-sm mr-2" onClick={() => document.getElementById("my_modal_2").showModal()}>View</button>
-                     <button className="btn btn-warning btn-sm mr-2" onClick={() => document.getElementById("my_modal_3").showModal()}>Edit</button>
-                     <button className="btn btn-error btn-sm">Delete</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <button
+              className="btn btn-outline btn-success add-user"
+              onClick={() => document.getElementById("my_modal_1").showModal()}
+            >
+              Add New User
+            </button>
+            <div className="card-body">
+              <div className="overflow-x-auto">
+                <table className="table table-zebra">
+                  <thead>
+                    <tr>
+                      <th>Id</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>About</th>
+                      <th>Photo</th>
+                      <th>Address</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th>1</th>
+                      <td>Cy Ganderton</td>
+                      <td>Blue@gmail.com</td>
+                      <td>Quality Control Specialist</td>
+                      <td>
+                        <img src="../../../public/vite.svg" alt="" />
+                      </td>
+                      <td>Mirpur-11</td>
+                      <td>
+                        <button
+                          className="btn btn-info btn-sm mr-2"
+                          onClick={() =>
+                            document.getElementById("my_modal_2").showModal()
+                          }
+                        >
+                          View
+                        </button>
+                        <button
+                          className="btn btn-warning btn-sm mr-2"
+                          onClick={() =>
+                            document.getElementById("my_modal_3").showModal()
+                          }
+                        >
+                          Edit
+                        </button>
+                        <button className="btn btn-error btn-sm">Delete</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
         </div>
       </div>
 

@@ -1,7 +1,19 @@
 import { Link } from "react-router-dom";
 import './Header.css'
+import { getAuth, signOut } from "firebase/auth";
+import app from "../firebase/firebase.init";
 
 const Header = () => {
+  const auth = getAuth(app);
+
+  //user Sign Out..!
+  const handleLogout = () => {
+    signOut(auth).then(() => {
+      alert('user logout')
+    }).catch((error) => {
+      console.log(error);
+    })
+  }
   return (
     <div className="container mx-auto mt-10 px-10">
       <div className="navbar bg-base-100">
@@ -45,7 +57,7 @@ const Header = () => {
                 <a>Settings</a>
               </li>
               <li>
-                <a>Logout</a>
+                <a onClick={handleLogout}>Logout</a>
               </li>
             </ul>
           </div>

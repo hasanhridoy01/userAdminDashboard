@@ -1,45 +1,55 @@
-import { getAuth, sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import app from "../firebase/firebase.init";
 import { useRef } from "react";
+import { Navigate } from "react-router-dom";
 
 const SignIn = () => {
-    const auth = getAuth(app);
-    const emailref = useRef();
+  const auth = getAuth(app);
+  const emailref = useRef();
 
-    //Form Submit......!
-    const handleFormSubmit = (event) => {
-        event.preventDefault();
+  //Form Submit......!
+  const handleFormSubmit = (event) => {
+    event.preventDefault();
 
-        //get value for form..!
-        const email = event.target.email.value;
-        const password = event.target.password.value;
+    //get value for form..!
+    const email = event.target.email.value;
+    const password = event.target.password.value;
 
-        //login in user...!
-        signInWithEmailAndPassword(auth, email, password).then((user) => {
-            console.log(user);
-            event.target.reset();
-            alert('done');
-        }).catch((error) => {
-            console.log(error.message);
-        })
-    }
+    //login in user...!
+    signInWithEmailAndPassword(auth, email, password)
+      .then((user) => {
+        console.log(user);
+        event.target.reset();
+        alert("done");
+        <Navigate to="/dashboard" replace={true}></Navigate>;
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
 
-    //Forget password....!
+  //Forget password....!
   const ForgetPass = () => {
     const email = emailref.current.value;
 
     //validation...!
-    if(!email){
-        alert('Please Provide your email address')
+    if (!email) {
+      alert("Please Provide your email address");
     }
 
     //send reset email..!
-    sendPasswordResetEmail(auth, email).then(() => {
-        alert('check your email..!');
-    }).catch(error => {
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        alert("check your email..!");
+      })
+      .catch((error) => {
         console.log(error.message);
-    })
-  }
+      });
+  };
 
   return (
     <div className="container mx-auto mt-28">
@@ -70,7 +80,14 @@ const SignIn = () => {
               <button className="btn btn-primary">Sign In</button>
             </div>
           </form>
-          <p><small>Forget Password? Please <button className="ml-0 btn btn-link" onClick={ForgetPass}>Reset</button></small></p>
+          <p>
+            <small>
+              Forget Password? Please{" "}
+              <button className="ml-0 btn btn-link" onClick={ForgetPass}>
+                Reset
+              </button>
+            </small>
+          </p>
         </div>
       </div>
     </div>
