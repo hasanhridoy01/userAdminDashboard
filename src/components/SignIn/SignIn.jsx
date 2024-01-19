@@ -13,9 +13,9 @@ const SignIn = () => {
   const emailref = useRef();
   const navigate = useNavigate();
 
-  const {user} = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
-  if(user){
+  if (user) {
     console.log(user.email);
   }
 
@@ -32,7 +32,7 @@ const SignIn = () => {
       .then((user) => {
         console.log(user);
         event.target.reset();
-        navigate('/dashboard', { replace: true });
+        navigate("/dashboard", { replace: true });
       })
       .catch((error) => {
         console.log(error.message);
@@ -83,18 +83,18 @@ const SignIn = () => {
                 className="input input-bordered input-accent w-full max-w-xs mt-3"
               />
             </div>
+            <p className="ml-6">
+              <small>
+                Forget Password? Please
+                <a className="m-0 btn btn-link" onClick={ForgetPass}>
+                  Reset
+                </a>
+              </small>
+            </p>
             <div className="card-actions justify-end">
               <button className="btn btn-primary">Sign In</button>
             </div>
           </form>
-          <p>
-            <small>
-              Forget Password? Please{" "}
-              <button className="ml-0 btn btn-link" onClick={ForgetPass}>
-                Reset
-              </button>
-            </small>
-          </p>
         </div>
       </div>
     </div>
