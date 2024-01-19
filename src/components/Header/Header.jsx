@@ -16,7 +16,6 @@ const Header = () => {
   //user Sign Out..!
   const handleLogout = () => {
     signOut(auth).then(() => {
-      alert('user logout')
       navigate('/', { replace: true });
     }).catch((error) => {
       console.log(error);

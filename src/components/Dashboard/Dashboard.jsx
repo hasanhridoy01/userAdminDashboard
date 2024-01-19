@@ -2,12 +2,26 @@ import "./Dashboard.css";
 import Header from "../Header/Header";
 import { useContext } from "react";
 import { AuthContext } from "../Providers/AuthProvider";
+import { getAuth, signOut } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import app from "../firebase/firebase.init";
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const auth = getAuth(app)
 
   if (user) {
     console.log(user.email);
+  }
+
+  const handleSignOut = (e) => {
+    e.preventDefault();
+    signOut(auth).then(() => {
+      navigate('/', { replace: true });
+    }).catch((error) => {
+      console.log(error);
+    })
   }
 
   return (
@@ -19,9 +33,9 @@ const Dashboard = () => {
             <div className="card-body">
               {user ? (
                 <>
-                  <span>{user.email}</span>
-                  <span>{user.displayName}</span>
-                  <button className="btn btn-xs">
+                  <span className="mx-auto">{user.displayName}</span>
+                  <span className="mx-auto">{user.email}</span>
+                  <button className="btn btn-xs" onClick={handleSignOut}>
                     Sign out
                   </button>
                 </>
