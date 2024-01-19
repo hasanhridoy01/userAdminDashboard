@@ -12,6 +12,7 @@ import Main from "./components/layout/Main.jsx";
 import SignIn from "./components/SignIn/SignIn.jsx";
 import SignUp from "./components/SignUp/SignUp.jsx";
 import AuthProvider from "./components/Providers/AuthProvider.jsx";
+import PrivateRoute from "./components/privateRoute/privateRoute.jsx";
 
 const router = createBrowserRouter([
   {
@@ -24,7 +25,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/dashboard",
-        element: <Dashboard></Dashboard>,
+        element: <PrivateRoute><Dashboard></Dashboard></PrivateRoute>,
       },
       {
         path: "/signup",

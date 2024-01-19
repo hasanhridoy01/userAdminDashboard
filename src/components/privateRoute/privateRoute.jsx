@@ -1,18 +1,15 @@
-import firebase from '../firebase/firebase.init'
+import { useContext } from 'react';
+import { AuthContext } from '../Providers/AuthProvider';
+import { Navigate } from 'react-router-dom';
 
-const privateRoute = ({children}) => {
+const PrivateRoute = ({children}) => {
 
-    const users = firebase.auth().listUser();
-    const user = users.map((user) => {
-        uid: user.uid,
-        email: user.email
-    })
+    const {user} = useContext(AuthContext);
 
-    return (
-        <div>
-            
-        </div>
-    );
+    if(user){
+        return children;
+    }
+    return <Navigate to="/" replace={true} ></Navigate>;
 };
 
-export default privateRoute;
+export default PrivateRoute;
