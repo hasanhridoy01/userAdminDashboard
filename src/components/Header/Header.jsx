@@ -30,7 +30,7 @@ const Header = () => {
         <div className="navabr">
           <Link to="dashboard" className="mr-2">Dashboard</Link>
           <Link to="/" className="mr-2">Sign In</Link>
-          <Link to="/signup" className="mr-2">Sign Up</Link>
+          <Link to="/registration" className="mr-2">Sign Up</Link>
         </div>
         <div className="flex-none gap-2">
           <div className="form-control">
