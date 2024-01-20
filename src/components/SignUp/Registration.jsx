@@ -183,7 +183,7 @@ const Registration = () => {
               data-te-ripple-init
               data-te-ripple-color="light"
             >
-              Login
+              Registration
             </button>
 
             <p className="mb-0 mt-2 pt-1 text-sm font-semibold">
