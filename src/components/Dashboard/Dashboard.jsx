@@ -5,7 +5,7 @@ import { AuthContext } from "../Providers/AuthProvider";
 import { getAuth, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import app, { database } from "../firebase/firebase.init";
-import { get, getDatabase, onValue, ref, remove } from "firebase/database";
+import { child, get, getDatabase, onValue, push, ref, remove, update } from "firebase/database";
 import { doc, deleteDoc } from "firebase/firestore";
 
 const Dashboard = () => {
@@ -119,6 +119,33 @@ const Dashboard = () => {
     document.getElementById("my_modal_2").showModal();
     console.log(data);
   };
+  
+  //Update a Single user..!
+  const updateSingleUser = (e,id) => {
+
+    const db = getDatabase();
+
+    // A post entry.
+    const postData = {
+      author: username,
+      uid: uid,
+      body: body,
+      title: title,
+      starCount: 0,
+      authorPic: picture
+    };
+  
+    // Get a key for a new Post.
+    const newPostKey = push(child(ref(db), 'posts')).key;
+  
+    // Write the new post's data simultaneously in the posts list and the user's post list.
+    const updates = {};
+    updates['/posts/' + newPostKey] = postData;
+    updates['/user-posts/' + id + '/' + newPostKey] = postData;
+    
+    //show Modal..!
+    document.getElementById("my_modal_3").showModal()
+  } 
 
   return (
     <div className="px-10">
@@ -182,7 +209,7 @@ const Dashboard = () => {
                           <button
                             className="btn btn-warning btn-sm mr-2"
                             onClick={() =>
-                              document.getElementById("my_modal_3").showModal()
+                              updateSingleUser(firebaseUSer.id)
                             }
                           >
                             Edit
