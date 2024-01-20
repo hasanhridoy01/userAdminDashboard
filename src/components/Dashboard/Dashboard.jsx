@@ -1,15 +1,17 @@
 import "./Dashboard.css";
 import Header from "../Header/Header";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../Providers/AuthProvider";
 import { getAuth, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import app from "../firebase/firebase.init";
+import app, { database } from "../firebase/firebase.init";
+import { get, ref } from 'firebase/database';
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const auth = getAuth(app);
+  const [getUser, setGetUser] = useState([]);
 
   if (user) {
     console.log(user.email);
@@ -54,6 +56,7 @@ const Dashboard = () => {
       console.log(res);
       alert('Data Store Done..!')
       event.target.reset();
+      getDataFirebase();
       document.getElementById("my_modal_1").hideModal();
     }).catch((error) => {
       console.log(error);
@@ -61,7 +64,22 @@ const Dashboard = () => {
   };
 
   //get all user form firebase Database...!
-  
+  const getDataFirebase =  useEffect(() => {
+    const userRef = ref(database, 'userData');
+    get(userRef).then((snapshot) => {
+      if(snapshot.exists()){
+        const userArray = Object.entries(snapshot.val()).map(([id, data]) => ({
+          id, 
+          ...data,
+        }))
+        setGetUser(userArray);
+      }else{
+        console.log("No Data available..!");
+      }
+    }).catch((error) => {
+      console.log(error);
+    })
+  },[]);
 
   return (
     <div className="px-10">
@@ -97,7 +115,6 @@ const Dashboard = () => {
                 <table className="table table-zebra">
                   <thead>
                     <tr>
-                      <th>Id</th>
                       <th>Name</th>
                       <th>Email</th>
                       <th>About</th>
@@ -107,35 +124,39 @@ const Dashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <th>1</th>
-                      <td>Cy Ganderton</td>
-                      <td>Blue@gmail.com</td>
-                      <td>Quality Control Specialist</td>
-                      <td>
-                        <img src="../../../public/vite.svg" alt="" />
-                      </td>
-                      <td>Mirpur-11</td>
-                      <td>
-                        <button
-                          className="btn btn-info btn-sm mr-2"
-                          onClick={() =>
-                            document.getElementById("my_modal_2").showModal()
-                          }
-                        >
-                          View
-                        </button>
-                        <button
-                          className="btn btn-warning btn-sm mr-2"
-                          onClick={() =>
-                            document.getElementById("my_modal_3").showModal()
-                          }
-                        >
-                          Edit
-                        </button>
-                        <button className="btn btn-error btn-sm">Delete</button>
-                      </td>
-                    </tr>
+                    {
+                      getUser.map((firebaseUSer) => (
+                        <tr key={firebaseUSer.id}>
+                        <td>{firebaseUSer.name}</td>
+                        <td>{firebaseUSer.email}</td>
+                        <td>{firebaseUSer.about}</td>
+                        <td>
+                          <img src="../../../public/vite.svg" alt="" />
+                        </td>
+                        <td>{firebaseUSer.address}</td>
+                        <td>
+                          <button
+                            className="btn btn-info btn-sm mr-2"
+                            onClick={() =>
+                              document.getElementById("my_modal_2").showModal()
+                            }
+                          >
+                            View
+                          </button>
+                          <button
+                            className="btn btn-warning btn-sm mr-2"
+                            onClick={() =>
+                              document.getElementById("my_modal_3").showModal()
+                            }
+                          >
+                            Edit
+                          </button>
+                          <button className="btn btn-error btn-sm">Delete</button>
+                        </td>
+                      </tr>
+                      ))
+                    }
+
                   </tbody>
                 </table>
               </div>
