@@ -13,6 +13,7 @@ import SignIn from "./components/SignIn/SignIn.jsx";
 import SignUp from "./components/SignUp/SignUp.jsx";
 import AuthProvider from "./components/Providers/AuthProvider.jsx";
 import PrivateRoute from "./components/privateRoute/privateRoute.jsx";
+import Login from "./components/SignIn/Login.jsx";
 
 const router = createBrowserRouter([
   {
@@ -21,7 +22,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <SignIn></SignIn>,
+        element: <Login></Login>,
       },
       {
         path: "/dashboard",
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
       {
         path: "/signup",
         element: <SignUp></SignUp>,
+      },
+      {
+        path: "/login",
+        element: <SignIn></SignIn>,
       },
     ],
   },
