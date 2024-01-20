@@ -5,13 +5,15 @@ import { AuthContext } from "../Providers/AuthProvider";
 import { getAuth, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import app, { database } from "../firebase/firebase.init";
-import { get, ref } from 'firebase/database';
+import { get, getDatabase, onValue, ref, remove } from "firebase/database";
+import { doc, deleteDoc } from "firebase/firestore";
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const auth = getAuth(app);
   const [getUser, setGetUser] = useState([]);
+  const [data, setData] = useState(null);
 
   if (user) {
     console.log(user.email);
@@ -29,9 +31,9 @@ const Dashboard = () => {
   };
 
   //Add New User form Database...!
-  const handleFormSubmit = async(event) => {
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
-    
+
     //get all value for from field....!
     const name = event.target.name.value;
     const email = event.target.email.value;
@@ -39,47 +41,84 @@ const Dashboard = () => {
     const address = event.target.address.value;
 
     //set Data...!
-    const userSendData = {name, email, about, address}
+    const userSendData = { name, email, about, address };
 
-    if(userSendData){
+    if (userSendData) {
       console.log(userSendData);
     }
 
     //send all data form Database.....!
-    fetch('https://useradminapps-default-rtdb.firebaseio.com/userData.json',{
-      method: "POST", 
+    fetch("https://useradminapps-default-rtdb.firebaseio.com/userData.json", {
+      method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(userSendData)
-    }).then((res) => {
-      console.log(res);
-      alert('Data Store Done..!')
-      event.target.reset();
-      getDataFirebase();
-      document.getElementById("my_modal_1").hideModal();
-    }).catch((error) => {
-      console.log(error);
+      body: JSON.stringify(userSendData),
     })
+      .then((res) => {
+        console.log(res);
+        alert("Data Store Done..!");
+        event.target.reset();
+        getDataFirebase();
+        document.getElementById("my_modal_1").hideModal();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   //get all user form firebase Database...!
-  const getDataFirebase =  useEffect(() => {
-    const userRef = ref(database, 'userData');
-    get(userRef).then((snapshot) => {
-      if(snapshot.exists()){
-        const userArray = Object.entries(snapshot.val()).map(([id, data]) => ({
-          id, 
-          ...data,
-        }))
-        setGetUser(userArray);
-      }else{
-        console.log("No Data available..!");
-      }
-    }).catch((error) => {
-      console.log(error);
-    })
-  },[]);
+  const getDataFirebase = useEffect(() => {
+    const userRef = ref(database, "userData");
+    get(userRef)
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          const userArray = Object.entries(snapshot.val()).map(
+            ([id, data]) => ({
+              id,
+              ...data,
+            })
+          );
+          setGetUser(userArray);
+        } else {
+          console.log("No Data available..!");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  //Single User...!
+  const handleSingleUserDelete = async (id) => {
+    remove(ref(database, "userData", +id))
+      .then((data) => {
+        console.log(data);
+        alert("Data Deleted SuccessFull..!");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  //Find Single User
+  const handleFindData = (id) => {
+    // Function to fetch a single piece of data
+    const fetchData = async () => {
+      const database = getDatabase();
+      const dataRef = ref(database, "id");
+
+      // Set up a one-time listener for the data
+      onValue(dataRef, (snapshot) => {
+        const fetchedData = snapshot.val();
+        setData(fetchedData);
+      });
+    };
+    fetchData();
+    //show modal
+    document.getElementById("my_modal_2").showModal();
+    console.log(data);
+  };
 
   return (
     <div className="px-10">
@@ -124,9 +163,8 @@ const Dashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {
-                      getUser.map((firebaseUSer) => (
-                        <tr key={firebaseUSer.id}>
+                    {getUser.map((firebaseUSer) => (
+                      <tr key={firebaseUSer.id}>
                         <td>{firebaseUSer.name}</td>
                         <td>{firebaseUSer.email}</td>
                         <td>{firebaseUSer.about}</td>
@@ -137,9 +175,7 @@ const Dashboard = () => {
                         <td>
                           <button
                             className="btn btn-info btn-sm mr-2"
-                            onClick={() =>
-                              document.getElementById("my_modal_2").showModal()
-                            }
+                            onClick={() => handleFindData(firebaseUSer.id)}
                           >
                             View
                           </button>
@@ -151,12 +187,17 @@ const Dashboard = () => {
                           >
                             Edit
                           </button>
-                          <button className="btn btn-error btn-sm">Delete</button>
+                          <button
+                            className="btn btn-error btn-sm"
+                            onClick={() =>
+                              handleSingleUserDelete(firebaseUSer.id)
+                            }
+                          >
+                            Delete
+                          </button>
                         </td>
                       </tr>
-                      ))
-                    }
-
+                    ))}
                   </tbody>
                 </table>
               </div>
